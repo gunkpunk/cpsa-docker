@@ -36,3 +36,15 @@ Project workflow (recommended):
 ## License
 
 Dockerfile is MIT. CPSA is BSD-3-Clause.
+
+## Wrapper script
+
+A convenience wrapper lives at `bin/cpsa`. Put it on your PATH:
+
+    ln -s "$(pwd)/bin/cpsa" /usr/local/bin/cpsa
+
+Then:
+
+    cpsa cpsa4 -o prob.txt prob.scm
+    cpsa make
+    cpsa cpsa4init
