@@ -4,11 +4,18 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends graphviz make && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/cpsa
-RUN git clone --depth 1 https://github.com/mitre/cpsa.git . && \
-    cabal update && \
-    cabal install --overwrite-policy=always --ghc-options="-j1 +RTS -M2g -RTS"
+ARG CPSA_REF=4.4.8
 
-ENV PATH=/root/.cabal/bin:$PATH
+WORKDIR /opt/cpsa
+RUN git clone --depth 1 --branch "${CPSA_REF}" https://github.com/mitre/cpsa.git . && \
+    cabal update && \
+    cabal install \
+        --install-method=copy \
+        --installdir=/usr/local/bin \
+        --overwrite-policy=always
+
+RUN useradd --create-home --shell /bin/bash cpsa
+USER cpsa
 WORKDIR /work
+
 CMD ["cpsa4", "-h"]
